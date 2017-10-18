@@ -1,6 +1,5 @@
 
 
-
 import MySQLdb
 
 
@@ -20,7 +19,7 @@ db = MySQLdb.connect(host,user,password,database )
 #cursor = db.cursor()
 cursor = db.cursor(MySQLdb.cursors.DictCursor)
 # execute SQL query using execute() method.
-cursor.execute("SELECT pmid,abstract FROM publications WHERE match(abstract) against('"physically interacts"' IN BOOLEAN MODE)` ")
+cursor.execute("SELECT pmid,abstract FROM publications WHERE match(abstract) against("'interacts with'" IN BOOLEAN MODE);` ")
 
 # Fetch a single row using fetchone() method.
 results = cursor.fetchall()
