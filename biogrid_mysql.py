@@ -54,6 +54,8 @@ print('done1')
 
 output = [] #'gene_A', 'tau_A', 'gene_B', 'tau_B'
 
+
+
 for row_ALN in results_ALN:
 
   gene = row_ALN['gene'].lower()
@@ -103,6 +105,6 @@ print('done3')
 
 with open('biogrid-tau-ppi.csv','wb') as file:
     for line in output2:
-        file.write(str(line[0])+","+str(line[1])+str(line[2])+","+str(line[3]))
+        file.write(str(line[0])+","+str(line[1])+","+str(line[2])+","+str(line[3]))
         file.write('\n')
 
