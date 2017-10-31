@@ -71,14 +71,17 @@ for row_ALN in results_ALN:
 	
 l = tau_A
 
-tau_A_diff = [sum(abs(abs(i)-abs(j)) for j in l if j!=i)/len(l) for i in l]
+len_l1 = len(l) - 1
+
+tau_A_diff = [sum(abs(abs(i)-abs(j)) for j in l if j!=i)/len_l1 for i in l]
 
 tau_A_avg = np.average(tau_A_diff)
 
 #print("len diff: " + str(len(tau_A_diff)))
 #print("diff: " + str(tau_A_diff))
 print("avg: " + str(tau_A_avg))
-
+#avg: 0.0775684772843
+# abs avg: avg: 0.0510719601067
 #end = timer()
 
 
@@ -93,6 +96,10 @@ csv_file = '/Users/timrpeterson/OneDrive - Washington University in St. Louis/Da
 with open(csv_file) as f:
 	reader = csv.DictReader(f)
 	for row in reader:
+
+		if row['Score'] < 0.9:
+			continue
+
 		try:
 			tau_A_diff.append(abs(abs(float(row['a_tau_pheno'])) - abs(float(row['b_tau_pheno']))))
 		except ValueError:
@@ -107,7 +114,10 @@ print(tau_A_diff)
 print("avg ppi: " + str(tau_A_avg))
 
 # avg ppi: 0.0868121328243
-# avg ppi: 0.0587519493237
+# avg abs ppi: 0.0587519493237
+# avg abs, Score > 0.9 ppi: 0.0587519493237
+
+
 '''len diff: 1034
 avg: 2.58123791103'''
 
