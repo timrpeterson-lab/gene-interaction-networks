@@ -44,7 +44,9 @@ db = MySQLdb.connect(host,user,password,database )
 #cursor = db.cursor()
 cursor = db.cursor(MySQLdb.cursors.DictCursor)
 
-cursor.execute('SELECT gene, `t avg3 average phenotype of strongest 3` as tau from `crispri`.aln where gene not like "%pseudo_%"; ')
+#cursor.execute('SELECT gene, `t avg3 average phenotype of strongest 3` as tau from `crispri`.aln where gene not like "%pseudo_%"; ')
+cursor.execute('SELECT gene, `r avg3 average phenotype of strongest 3` as tau from `crispri`.aln where gene not like "%pseudo_%"; ')
+
 
 results_ALN = cursor.fetchall()
 
@@ -60,6 +62,8 @@ print("hello")
 # ...
 
 #print(end - start) 
+
+
 tau_A = []
 
 for row_ALN in results_ALN:
@@ -80,11 +84,15 @@ tau_A_avg = np.average(tau_A_diff)
 #print("len diff: " + str(len(tau_A_diff)))
 #print("diff: " + str(tau_A_diff))
 print("avg: " + str(tau_A_avg))
+
+#tau
 #avg: 0.0775684772843
 # abs avg: avg: 0.0510719601067
+# abs - 1 avg: 0.051074405145
 #end = timer()
 
-
+#rho
+# abs - 1 avg: 0.0580234619271
 
 quit()
 
@@ -97,11 +105,12 @@ with open(csv_file) as f:
 	reader = csv.DictReader(f)
 	for row in reader:
 
-		if row['Score'] < 0.9:
-			continue
+		#if float(row['Score']) < 0.98:
+			#continue
 
 		try:
-			tau_A_diff.append(abs(abs(float(row['a_tau_pheno'])) - abs(float(row['b_tau_pheno']))))
+			#tau_A_diff.append(abs(abs(float(row['a_tau_pheno'])) - abs(float(row['b_tau_pheno']))))
+			tau_A_diff.append(abs(abs(float(row['a_rho_pheno'])) - abs(float(row['b_rho_pheno']))))
 		except ValueError:
 			pass
 
@@ -113,10 +122,14 @@ print(tau_A_diff)
 #print("diff: " + str(tau_A_diff))
 print("avg ppi: " + str(tau_A_avg))
 
+#tau
 # avg ppi: 0.0868121328243
 # avg abs ppi: 0.0587519493237
-# avg abs, Score > 0.9 ppi: 0.0587519493237
+# avg abs, Score > 0.95 ppi: 0.05807410137
+# avg abs, Score > 0.98 ppi: 0.0573491512837
 
+#rho
+#avg abs ppi: 0.0671395057277
 
 '''len diff: 1034
 avg: 2.58123791103'''
