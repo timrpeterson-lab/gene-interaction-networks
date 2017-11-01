@@ -64,7 +64,7 @@ print("hello")
 #print(end - start) 
 
 
-tau_A = []
+'''tau_A = []
 
 for row_ALN in results_ALN:
 	try:
@@ -83,7 +83,7 @@ tau_A_avg = np.average(tau_A_diff)
 
 #print("len diff: " + str(len(tau_A_diff)))
 #print("diff: " + str(tau_A_diff))
-print("avg: " + str(tau_A_avg))
+print("avg: " + str(tau_A_avg))'''
 
 #tau
 #avg: 0.0775684772843
@@ -94,9 +94,10 @@ print("avg: " + str(tau_A_avg))
 #rho
 # abs - 1 avg: 0.0580234619271
 
-quit()
+#quit()
 
-tau_A_diff = []
+tau_A_diff_high = []
+tau_A_diff_low = []
 
 csv_file = '/Users/timrpeterson/OneDrive - Washington University in St. Louis/Data/MORPHEOME/interaction_networks/bio-testing-10-30-17-Biogrid-scores-ALN-crispri-rho-tau.csv'
 
@@ -105,22 +106,130 @@ with open(csv_file) as f:
 	reader = csv.DictReader(f)
 	for row in reader:
 
-		#if float(row['Score']) < 0.98:
-			#continue
+		score = float(row['Score'])
 
-		try:
-			#tau_A_diff.append(abs(abs(float(row['a_tau_pheno'])) - abs(float(row['b_tau_pheno']))))
-			tau_A_diff.append(abs(abs(float(row['a_rho_pheno'])) - abs(float(row['b_rho_pheno']))))
-		except ValueError:
-			pass
+		if score > 0.834:
+			try:
+				#tau_A_diff.append(abs(abs(float(row['a_tau_pheno'])) - abs(float(row['b_tau_pheno']))))
+				tau_A_diff_high.append(abs(abs(float(row['a_rho_pheno'])) - abs(float(row['b_rho_pheno']))))
+			except ValueError:
+				pass
+		else:
+
+			try:
+				#tau_A_diff.append(abs(abs(float(row['a_tau_pheno'])) - abs(float(row['b_tau_pheno']))))
+				tau_A_diff_low.append(abs(abs(float(row['a_rho_pheno'])) - abs(float(row['b_rho_pheno']))))
+			except ValueError:
+				pass
 
 
-tau_A_avg = np.average(tau_A_diff)
+tau_high_avg = np.average(tau_A_diff_high)
+tau_low_avg = np.average(tau_A_diff_low)
 
-print(tau_A_diff)
+a = tau_A_diff_high
+b = tau_A_diff_low
+
+import scipy.stats as stats
+
+#print(tau_A_diff_high)
 #print("len diff: " + str(len(tau_A_diff)))
 #print("diff: " + str(tau_A_diff))
-print("avg ppi: " + str(tau_A_avg))
+print("avg high ppi: " + str(tau_high_avg))
+print("avg low ppi: " + str(tau_low_avg))
+
+# Use scipy.stats.ttest_ind.
+t, p = stats.ttest_ind(a, b, equal_var=False)
+print("ttest_ind:")
+
+print(t)
+print(p)
+
+'''
+ComPASS > 0.99
+avg high ppi: 0.064667924834
+avg low ppi: 0.069506651597
+ttest_ind:
+-5.20977856712
+1.90193907819e-07
+
+ComPASS > 0.98
+avg high ppi: 0.0649722791229
+avg low ppi: 0.0698375674262
+ttest_ind:
+-5.10100869539
+3.39944652212e-07
+
+ComPASS > 0.95
+avg high ppi: 0.0660323313883
+avg low ppi: 0.0693437990434
+ttest_ind:
+-3.20898080351
+0.00133415973008
+
+ComPASS > 0.9
+avg high ppi: 0.0664396160918
+avg low ppi: 0.0695763729642
+ttest_ind:
+-2.5833909478
+0.00979634427532
+
+ComPASS > 0.85
+avg high ppi: 0.0666754155538
+avg low ppi: 0.0700621748481
+ttest_ind:
+-2.24109810315
+0.0250578407052
+
+ComPASS > 0.84
+avg high ppi: 0.0666443363012
+avg low ppi: 0.0707401836801
+ttest_ind:
+-2.5198383291
+0.0117724931014
+
+ComPASS > 0.835
+avg high ppi: 0.0666569686126
+avg low ppi: 0.0708979168681
+ttest_ind:
+-2.50947723384
+0.0121256491217
+
+ComPASS > 0.834
+avg high ppi: 0.0667068894413
+avg low ppi: 0.0705574495042
+ttest_ind:
+-2.27205814165
+0.023130354542
+
+ComPASS > 0.8325
+avg high ppi: 0.0668370345227
+avg low ppi: 0.0695845494627
+ttest_ind:
+-1.62286636049
+0.104689960905
+
+ComPASS > 0.83
+avg high ppi: 0.0668334486953
+avg low ppi: 0.0696908032746
+ttest_ind:
+-1.67114342226
+0.094767060441
+
+ComPASS > 0.825
+avg high ppi: 0.0668948207033
+avg low ppi: 0.0693402877233
+ttest_ind:
+-1.38650713091
+0.165670912624
+
+ComPASS > 0.8
+avg high ppi: 0.0670781499172
+avg low ppi: 0.068030554275
+ttest_ind:
+-0.47151525332
+0.637315189016
+
+'''
 
 #tau
 # avg ppi: 0.0868121328243
